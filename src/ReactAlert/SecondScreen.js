@@ -2,7 +2,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, TextInput,Alert, BackHandler} from 'react-native';
+import {View, Text, StyleSheet,ToastAndroid, TextInput,Alert, BackHandler} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class SecondScreen extends React.Component {
@@ -10,8 +10,8 @@ class SecondScreen extends React.Component {
     super(props);
 
     this.state = {
-      text: ' ',
-      input: ' ',
+      text: ' press again to exit',
+      counter: 0,
     };
   }
 onChange(input){
@@ -21,26 +21,33 @@ showAlert(){Alert.alert(
     'Alert Title',
     'My Alert Msg',
     [
-      {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-      {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
+      {text: 'Go Back', onPress: () => {
+        this.props.navigation.goBack()}
+      , style: 'cancel'},
     ],
-    { cancelable: false }
   );
 }
 
 componentDidMount(){
     BackHandler.addEventListener(
         'hardwareBackPress',
-        ()=>{
-            this.showAlert();
-            return true;
+        ()=>{this.setState({
+          counter:this.state.counter+1
         })
+        if(this.state.counter===1)
+        {
+          ToastAndroid.showWithGravity(this.state.text, 4000,ToastAndroid.CENTER)
+        }
+        if(this.state.counter===2)
+
+        this.showAlert();
+            return true;}
+        );
 }
   render() {
     const {
       navigation,
-      route 
+      route ,
     } = this.props;
     const { text,input}=this.state;
 
