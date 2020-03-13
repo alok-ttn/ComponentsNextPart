@@ -24,7 +24,6 @@ showAlert(){Alert.alert(
     [
       {text: 'Go Back', onPress: () => {
         Clipboard.setString('new content copy'),
-        this.getContent();
         this.props.navigation.goBack()}
       , style: 'cancel'},
     ],
