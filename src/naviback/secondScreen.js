@@ -21,7 +21,7 @@ onChange(input){
     const {
       navigation,
       route 
-    } = this.props;
+    } = this.prop;
     const { text,input}=this.state;
 
     return (

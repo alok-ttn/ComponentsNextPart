@@ -1,41 +1,45 @@
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {View, Text, StyleSheet, Clipboard} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class FirstScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     text:'',
-     nextScreen:'',
+      text: '',
+      input: '',
+      nextScreen: '',
     };
   }
-addString=(txt)=>{
-  this.setState({
-    nextScreen:txt
-  })
-}
-
+  async getContent() {
+    const content = await Clipboard.getString();
+    this.setState({
+      nextScreen: content,
+    });
+  }
   render() {
     const {navigation} = this.props;
-    const {text,nextScreen} = this.state;
+    const {text, nextScreen} = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.child}>
-          <Text
-            style={styles.textStyle}>
-            {text} </Text>
-          <TouchableOpacity onPress={()=>navigation.navigate('SecondScreen',{newHandler:this.addString})}>
-              <Text style={styles.textChild}>proceed {text}{nextScreen}</Text>
+          <Text style={styles.textStyle}>{text} </Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('SecondScreen', {newHandler: this.addString})
+            }>
+            <Text style={styles.textChild}> click to proceed</Text>
           </TouchableOpacity>
-
+          <TouchableOpacity
+            onPress={() => {
+              this.getContent();
+            }}>
+            <Text style={styles.textChild}> click to paste</Text>
+          </TouchableOpacity>
+          <Text style={styles.textChild}>{nextScreen}</Text>
+          <Text />
         </View>
-
-        </View>
-
+      </View>
     );
   }
 }
@@ -45,27 +49,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3DFDE',
     flex: 1,
     // alignItems:"flex-end",
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   child: {
     //height: 100,
     width: '100%',
     flex: 1,
     backgroundColor: '#4B2875',
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  textStyle:{
+  textStyle: {
     fontSize: 25,
     paddingTop: 50,
     paddingLeft: 20,
     color: '#fff',
-    justifyContent:'center',
-
+    justifyContent: 'center',
   },
-  textChild:{
-    fontSize:40,
-    color:'white',
+  textChild: {
+    fontSize: 40,
+    color: 'white',
   },
 });
 

@@ -2,7 +2,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet,ToastAndroid, TextInput,Alert, BackHandler} from 'react-native';
+import {View, Text, StyleSheet,ToastAndroid, TextInput,Clipboard,Alert, BackHandler} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class SecondScreen extends React.Component {
@@ -11,6 +11,7 @@ class SecondScreen extends React.Component {
 
     this.state = {
       text: ' press again to exit',
+      input:'clipboard copy',
       counter: 0,
     };
   }
@@ -18,10 +19,12 @@ onChange(input){
 
 }
 showAlert(){Alert.alert(
-    'Alert Title',
-    'My Alert Msg',
+    'Hey There',
+    'TO Exit Click Go Back',
     [
       {text: 'Go Back', onPress: () => {
+        Clipboard.setString('new content copy'),
+        this.getContent();
         this.props.navigation.goBack()}
       , style: 'cancel'},
     ],
@@ -34,9 +37,10 @@ componentDidMount(){
         ()=>{this.setState({
           counter:this.state.counter+1
         })
+        setTimeout(()=>{this.setState({counter: 0})}, 2000)
         if(this.state.counter===1)
         {
-          ToastAndroid.showWithGravity(this.state.text, 4000,ToastAndroid.CENTER)
+          ToastAndroid.showWithGravity(this.state.text, 2000,ToastAndroid.BOTTOM)
         }
         if(this.state.counter===2)
 
@@ -45,31 +49,10 @@ componentDidMount(){
         );
 }
   render() {
-    const {
-      navigation,
-      route ,
-    } = this.props;
-    const { text,input}=this.state;
-
     return (
       <View style={styles.container}>
-        <View style={[styles.child, {backgroundColor: '#4B2875',justifyContent:'center',alignItems:'center'}]}>
-          <TextInput style={{width:200,height:50,backgroundColor:'#f00'}} onChangeText={(txt)=>this.setState({
-            input:txt
-          })}>
- 
-          </TextInput>
-          <TouchableOpacity onPress={()=>{
-            const newHandler = route.params.newHandler;
-            //   console.warn({input})
-            newHandler(input)
-            navigation.goBack()
-          }}>
-              <Text style={{fontSize:40,color:'white'}}>press</Text>
-          </TouchableOpacity>
-        </View>
-
-        </View>
+        <Text style={styles.textInput}>{this.state.input}</Text>
+      </View>
 
     );
   }
@@ -77,7 +60,7 @@ componentDidMount(){
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E3DFDE',
+    backgroundColor: '#f00',
     flex: 1,
     // alignItems:"flex-end",
     justifyContent: 'center',
@@ -86,6 +69,11 @@ const styles = StyleSheet.create({
     //height: 100,
     width: '100%',
     flex: 1,
+  },
+  textInput:{
+    fontSize:20,
+    justifyContent:'center',
+    alignSelf:'center',
   },
 });
 
